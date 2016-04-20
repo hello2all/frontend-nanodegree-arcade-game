@@ -3,7 +3,7 @@ var Enemy = function() {
     this.x = -101;
     this.row = Math.floor((Math.random() * 3) + 1); // random row
     this.y = this.row * 83 - 20;
-    this.speed = Math.floor((Math.random() * 100) + 50);; // Generate speed between 50 - 100
+    this.speed = Math.floor((Math.random() * 100) + 50); // Generate speed between 50 - 100
     // The image/sprite for our enemies
     this.sprite = 'images/enemy-bug.png';
 };
@@ -86,7 +86,7 @@ Player.prototype.update = function() {
     }
     // respown at starting postion once reach water
     if (this.y < 0){
-      this.init()
+      this.init();
     }
 };
 
