@@ -2,9 +2,10 @@
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = 0;
-    this.y = 0;
-    this.speed = 0;
+    this.x = -101;
+    this.row = Math.floor((Math.random() * 3) + 1);
+    this.y = this.row * 83 - 20;
+    this.speed = Math.floor((Math.random() * 100) + 50);;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -16,7 +17,20 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.speed * dt;
+    this.x = this.x + this.speed * dt;
+    if(this.x > 505)
+    {
+        // reset enemy once crawl out of the frame, to a random row
+        this.x = -101;
+        this.row = Math.floor((Math.random() * 3) + 1);
+        this.y = this.row * 83 - 20;
+    }
+    // collision
+    if((player.x > (this.x - 50) && player.x < (this.x + 50)) && (player.y > (this.y -40) && (player.y < (this.y + 40))))
+    {
+        player.init();
+    }
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -76,6 +90,9 @@ Player.prototype.update = function() {
             console.log('Player.prototype.update error');
         }
     }
+    if (this.y < 0){
+      this.init()
+    }
 };
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -89,8 +106,11 @@ Player.prototype.init = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
+var NoEnmy = Math.floor((Math.random() * 10) + 3);
+for (var i = 0; i < NoEnmy; i++) {
+    allEnemies.push(new Enemy());
+}
 var player = new Player();
-player.init();
 
 
 
