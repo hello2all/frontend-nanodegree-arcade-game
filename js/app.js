@@ -2,7 +2,9 @@
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-
+    this.x = 0;
+    this.y = 0;
+    this.speed = 0;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -14,6 +16,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.speed * dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -24,11 +27,70 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+var Player = function(){
+    this.direction = -1;
+    this.stepX = 101;
+    this.stepY = 83;
+    this.sprite = 'images/char-boy.png';
 
+};
+Player.prototype.handleInput = function(key) {
+    if(key == 'left' && this.x > 0){
+        this.direction = 1;
+    }
+    else if(key == 'up' && this.y > 0){
+        this.direction = 2;
+    }
+    else if(key == 'right' && this.x < 404){
+        this.direction = 3;
+    }
+    else if(key == 'down' && this.y < 390){
+        this.direction = 4;
+    }
+    else {
+      this.direction = -1;
+    }
+};
+Player.prototype.update = function() {
+    if(this.direction != -1){
+        if(this.direction == 1){
+            this.x = this.x - this.stepX;
+            this.direction = -1;
+        }
 
+        else if(this.direction == 2){
+            this.y = this.y - this.stepY ;
+            this.direction = -1;
+        }
+
+        else if(this.direction == 3){
+            this.x = this.x + this.stepX;
+            this.direction = -1;
+        }
+
+        else if(this.direction == 4){
+            this.y = this.y + this.stepY ;
+            this.direction = -1;
+        }
+        else {
+            console.log('Player.prototype.update error');
+        }
+    }
+};
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Player.prototype.init = function() {
+    this.x = 202;
+    this.y = 390;
+};
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var allEnemies = [];
+var player = new Player();
+player.init();
 
 
 
