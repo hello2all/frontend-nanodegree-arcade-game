@@ -1,31 +1,23 @@
 // Enemies our player must avoid
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.x = -101;
-    this.row = Math.floor((Math.random() * 3) + 1);
+    this.row = Math.floor((Math.random() * 3) + 1); // random row
     this.y = this.row * 83 - 20;
-    this.speed = Math.floor((Math.random() * 100) + 50);;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    this.speed = Math.floor((Math.random() * 100) + 50);; // Generate speed between 50 - 100
+    // The image/sprite for our enemies
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     this.x = this.x + this.speed * dt;
     if(this.x > 505)
     {
-        // reset enemy once crawl out of the frame, to a random row
+        // // respown at a random row once out of the frame
         this.x = -101;
-        this.row = Math.floor((Math.random() * 3) + 1);
+        this.row = Math.floor((Math.random() * 3) + 1); // respown at a random row
         this.y = this.row * 83 - 20;
     }
-    // collision
+    // collision: collide if the player is inside a 50*40 box based on the enemy's position
     if((player.x > (this.x - 50) && player.x < (this.x + 50)) && (player.y > (this.y -40) && (player.y < (this.y + 40))))
     {
         player.init();
@@ -38,16 +30,16 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// Player class
 var Player = function(){
-    this.direction = -1;
-    this.stepX = 101;
-    this.stepY = 83;
+    this.direction = -1;  // filtered key direction
+    this.stepX = 101;  // horizontal moving step gap
+    this.stepY = 83;  // vertical moving step gap
     this.sprite = 'images/char-boy.png';
 
 };
+
+// handleInput method, filter out movements lead to getting out of frame
 Player.prototype.handleInput = function(key) {
     if(key == 'left' && this.x > 0){
         this.direction = 1;
@@ -65,6 +57,8 @@ Player.prototype.handleInput = function(key) {
       this.direction = -1;
     }
 };
+
+
 Player.prototype.update = function() {
     if(this.direction != -1){
         if(this.direction == 1){
@@ -90,14 +84,17 @@ Player.prototype.update = function() {
             console.log('Player.prototype.update error');
         }
     }
+    // respown at starting postion once reach water
     if (this.y < 0){
       this.init()
     }
 };
+
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Initiate the game by putting player back to starting position
 Player.prototype.init = function() {
     this.x = 202;
     this.y = 390;
